@@ -145,12 +145,6 @@ const Calculator = () => {
             backgroundColor: colors.primary + '05',
             borderColor: colors.primary + 30,
         },
-        // {
-        //     DisplayName: "\xB1",
-        //     Value: "+/-",
-        //     backgroundColor: colors.primary + '05',
-        //     borderColor: colors.primary + 30,
-        // },
         {
             DisplayName: '0',
             Value: 0,
@@ -286,13 +280,6 @@ const Calculator = () => {
         multiGet()
     }, [userInput])
 
-    // useEffect(() => {
-    //     let multiGet = async () => {
-    //         setStorage(await AsyncStorage.multiGet(await AsyncStorage.getAllKeys()))
-    //     }
-    //     multiGet()
-    // }, [])
-
     const style = StyleSheet.create({
         LinearGradientView: {
             flex: 1,
@@ -408,8 +395,6 @@ const Calculator = () => {
         }
     })
 
-    console.log(storage.length);
-
     let [fontsLoaded] = useFonts({
         sourceCodePro
     });
@@ -465,6 +450,7 @@ const Calculator = () => {
                 </View>
 
                 {/* Main Calculator Pad start */}
+
                 <View style={style.ButtonMainView}>
 
                     <View style={{ flexDirection: 'row', flex: 1 }}>
@@ -499,20 +485,22 @@ const Calculator = () => {
                     </View>
 
                 </View>
+
                 {/* Main Calculator Pad End */}
 
                 {/* History Panel Start */}
+
                 {historyVisible ?
                     <LinearGradient style={style.GradientTouchableOpacityHistory}
                         colors={[dark ? colors.primary + 20 : colors.primary + 30,
                         dark ? colors.card + 60 : colors.primary + "01"]} >
 
-                        <View style={{ height: '100%', width: '100%', }}>
+                        <View style={{ height: '100%', width: '100%' }}>
+
                             {storage.length == 0 ?
                                 <View style={{ height: '100%', width: '100%', padding: 20, justifyContent: 'center' }}>
                                     <Text style={style.historyNotFountText}>No History Found</Text>
-                                </View> :
-                                <FlatList
+                                </View> : <FlatList
                                     data={storage.map((value, i) => ({ index: i, data: value }))}
                                     style={{ height: '100%', }}
                                     renderItem={({ item }) => {
@@ -520,9 +508,7 @@ const Calculator = () => {
                                             let res = await AsyncStorage.getItem(item.data[0])
                                             setUserInput(res)
                                         }
-                                        console.log("item", item.data);
                                         return (
-                                            // item.data[item.data.length - 1] === 'already' ? null :
                                             <TouchableOpacity
                                                 activeOpacity={0.8}
                                                 style={style.TouchableOpacityHistory} onPress={() => dataSetTouserInput(item)} >
@@ -534,7 +520,7 @@ const Calculator = () => {
                                                 </Text>
                                                 <View style={style.HistoryFlatListAnswerView} />
                                                 <Text style={style.HistoryFlatListAnswerText}>
-                                                    {item.data[0]}=  <Text style={{ fontFamily: 'sourceCodePro', fontSize: 15, }}>Answer</Text>
+                                                    {item.data[0]}=  <Text style={{ fontFamily: 'sourceCodePro', fontSize: 15 }}>Answer</Text>
                                                 </Text>
                                             </TouchableOpacity>
                                         )
@@ -542,13 +528,11 @@ const Calculator = () => {
                                     key={(item) => { item.index }}
                                     keyExtractor={(item) => { return item.index }}
                                 />}
+
                             {storage.length !== 0 ?
                                 <CustomButton
                                     bgStyle={style.RemoveHistoryButton}
-                                    textStyle={{
-                                        fontFamily: 'sourceCodePro',
-                                        color: colors.mainText
-                                    }}
+                                    textStyle={{ fontFamily: 'sourceCodePro', color: colors.mainText }}
                                     title='Remove history'
                                     onPress={async () => {
                                         try {
@@ -564,7 +548,9 @@ const Calculator = () => {
                                     }} /> : null}
                         </View>
                     </LinearGradient> : null}
+
                 {/* History Panel End */}
+
             </View >
         )
     }
