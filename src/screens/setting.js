@@ -111,7 +111,7 @@ const Setting = () => {
             <IconButton icon={'facebook'} iconColor={'#4267B2'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://www.facebook.com/mjahan.zeb.33") }} />
             <IconButton icon={'email'} iconColor={"#c71610"} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("mailto:jahanzebsupp@gmail.com") }} />
             <IconButton icon={'send'} iconColor={'#00acee'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://t.me/jahanzeb009") }} />
-            <IconButton icon={'github'} iconColor={'#999999'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://github.com/Jahanzeb009/react-native.git") }} />
+            <IconButton icon={'github'} iconColor={'#999999'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://github.com/Jahanzeb009/calculator-react-native.git") }} />
           </View>
 
           {/* Developer Intro/ links end */}

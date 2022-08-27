@@ -220,7 +220,7 @@ const Calculator = () => {
             if (item === 'DEL') return setUserInput(userInput.toString().substring(0, (userInput.length - 1)))
             if (item === 'C') return setLastNumber('0'), setUserInput('')
             if (item === '=') return equalButton(), saveHistory()
-            
+
         } catch (error) {
             toast('Invaild Format/Input')
             console.log(error.message)
@@ -281,17 +281,17 @@ const Calculator = () => {
     // Ye jasy hi userInput me kuch change hoga vesy hi AsyncStorage se all key + values fetch kary ga or os ko storage me set kr dy ga
     useEffect(() => {
         let multiGet = async () => {
-            setStorage(await AsyncStorage.multiGet(await AsyncStorage.getAllKeys()))
+            setStorage((await AsyncStorage.multiGet(await AsyncStorage.getAllKeys())).splice(0, (await AsyncStorage.multiGet(await AsyncStorage.getAllKeys())).length - 2))
         }
         multiGet()
     }, [userInput])
 
-
-    const inputref = useRef()
-
-    useEffect(() => {
-        inputref.current?.focus()
-    }, [])
+    // useEffect(() => {
+    //     let multiGet = async () => {
+    //         setStorage(await AsyncStorage.multiGet(await AsyncStorage.getAllKeys()))
+    //     }
+    //     multiGet()
+    // }, [])
 
     const style = StyleSheet.create({
         LinearGradientView: {
@@ -370,8 +370,21 @@ const Calculator = () => {
             borderColor: colors.border + 30,
             backgroundColor: colors.card + 70,
         },
+        smallBoxIndex: {
+            borderWidth: 1,
+            right: 20,
+            borderRadius: 10,
+            paddingVertical: 2,
+            textAlign: 'center',
+            position: 'absolute',
+            paddingHorizontal: 10,
+            color: colors.mainText,
+            borderColor: colors.border,
+            transform: [{ scale: 0.9 }],
+            backgroundColor: colors.card,
+        },
         AnswerShowText: {
-            fontSize: 15,
+            fontSize: 18,
             color: colors.mainText,
             fontFamily: 'sourceCodePro',
         },
@@ -381,8 +394,8 @@ const Calculator = () => {
             borderColor: colors.border + 30,
         },
         HistoryFlatListAnswerText: {
-            fontSize: 10,
-            textAlign: 'left',
+            fontSize: 20,
+            textAlign: 'right',
             color: colors.mainText + 99,
         },
         RemoveHistoryButton: {
@@ -394,6 +407,8 @@ const Calculator = () => {
             borderWidth: 1
         }
     })
+
+    console.log(storage.length);
 
     let [fontsLoaded] = useFonts({
         sourceCodePro
@@ -496,54 +511,57 @@ const Calculator = () => {
                             {storage.length == 0 ?
                                 <View style={{ height: '100%', width: '100%', padding: 20, justifyContent: 'center' }}>
                                     <Text style={style.historyNotFountText}>No History Found</Text>
-                                </View> : <FlatList
-                                    data={(storage.splice(0, storage.length - 2)).map((value, i) => ({ index: i, data: value }))}
+                                </View> :
+                                <FlatList
+                                    data={storage.map((value, i) => ({ index: i, data: value }))}
                                     style={{ height: '100%', }}
                                     renderItem={({ item }) => {
                                         let dataSetTouserInput = async (item) => {
                                             let res = await AsyncStorage.getItem(item.data[0])
                                             setUserInput(res)
                                         }
+                                        console.log("item", item.data);
                                         return (
-                                            item.data[item.data.length - 1] === 'already' ? null :
-                                                <TouchableOpacity key={item.index}
-                                                    activeOpacity={0.8}
-                                                    style={style.TouchableOpacityHistory} onPress={() => dataSetTouserInput(item)} >
-                                                    <Text style={[style.smallBoxIndex, { top: item.index === 0 ? -8 : -12, }]}>
-                                                        {item.index}
-                                                    </Text>
-                                                    <Text style={style.AnswerShowText}>
-                                                        {item.data[1]}
-                                                    </Text>
-                                                    <View style={style.HistoryFlatListAnswerView} />
-                                                    <Text style={style.HistoryFlatListAnswerText}>
-                                                        ={item.data[0]}  <Text style={{}}>Answer</Text>
-                                                    </Text>
-                                                </TouchableOpacity>
+                                            // item.data[item.data.length - 1] === 'already' ? null :
+                                            <TouchableOpacity
+                                                activeOpacity={0.8}
+                                                style={style.TouchableOpacityHistory} onPress={() => dataSetTouserInput(item)} >
+                                                <Text style={[style.smallBoxIndex, { top: item.index === 0 ? -7 : -12 }]}>
+                                                    {item.index}
+                                                </Text>
+                                                <Text style={style.AnswerShowText}>
+                                                    {item.data[1]}
+                                                </Text>
+                                                <View style={style.HistoryFlatListAnswerView} />
+                                                <Text style={style.HistoryFlatListAnswerText}>
+                                                    {item.data[0]}=  <Text style={{ fontFamily: 'sourceCodePro', fontSize: 15, }}>Answer</Text>
+                                                </Text>
+                                            </TouchableOpacity>
                                         )
                                     }}
                                     key={(item) => { item.index }}
                                     keyExtractor={(item) => { return item.index }}
                                 />}
-                            {storage.length !== 0 ? <CustomButton
-                                bgStyle={style.RemoveHistoryButton}
-                                textStyle={{
-                                    fontFamily: 'sourceCodePro',
-                                    color: colors.mainText
-                                }}
-                                title='Remove history'
-                                onPress={async () => {
-                                    try {
-                                        let check = async () => {
-                                            let b = await AsyncStorage.getAllKeys()
-                                            return await AsyncStorage.multiRemove(b.splice(0, b.length - 1))
+                            {storage.length !== 0 ?
+                                <CustomButton
+                                    bgStyle={style.RemoveHistoryButton}
+                                    textStyle={{
+                                        fontFamily: 'sourceCodePro',
+                                        color: colors.mainText
+                                    }}
+                                    title='Remove history'
+                                    onPress={async () => {
+                                        try {
+                                            let check = async () => {
+                                                let b = await AsyncStorage.getAllKeys()
+                                                return await AsyncStorage.multiRemove(b.splice(0, b.length - 1))
+                                            }
+                                            check()
+                                            setStorage([])
+                                        } catch (e) {
+                                            console.log(e.message);
                                         }
-                                        check()
-                                        setStorage([])
-                                    } catch (e) {
-                                        console.log(e.message);
-                                    }
-                                }} /> : null}
+                                    }} /> : null}
                         </View>
                     </LinearGradient> : null}
                 {/* History Panel End */}
