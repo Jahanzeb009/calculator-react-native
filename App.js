@@ -17,7 +17,6 @@ export default function App() {
   const [userColor, setUserColor] = useState('#03a073')
 
   // use for authcontext
-  // use for authcontext
 
   const [ColorChange, setColorChange] = useState(0)
 
