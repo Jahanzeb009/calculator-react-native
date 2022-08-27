@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import calculator from './src/screens/calculator';
 import setting, { } from './src/screens/setting';
-import { DarkTheme, DefaultTheme, NavigationContainer, useTheme } from '@react-navigation/native'
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
 import { useColorScheme } from 'react-native';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
