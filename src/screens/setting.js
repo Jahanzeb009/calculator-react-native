@@ -111,7 +111,7 @@ const Setting = () => {
             <IconButton icon={'facebook'} iconColor={'#4267B2'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://www.facebook.com/mjahan.zeb.33") }} />
             <IconButton icon={'email'} iconColor={"#c71610"} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("mailto:jahanzebsupp@gmail.com") }} />
             <IconButton icon={'send'} iconColor={'#00acee'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://t.me/jahanzeb009") }} />
-            <IconButton icon={'github'} iconColor={'#999999'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://github.com/Jahanzeb009/calculator-react-native.git") }} />
+            <IconButton icon={'github'} iconColor={'#808080'} mode="contained-tonal" style={{ backgroundColor: colors.card }} onPress={() => { Linking.openURL("https://github.com/Jahanzeb009/calculator-react-native.git") }} />
           </View>
 
           {/* Developer Intro/ links end */}
@@ -139,8 +139,8 @@ const Setting = () => {
               </View>
 
               <View style={{ alignItems: "center", padding: 5, backgroundColor: colors.border + 50, borderRadius: 15 }}>
-                <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#8a4af3") }} style={[styles.dialogColorSelect, { backgroundColor: '#8a4af3' }]} />
-                <Text style={{ color: colors.mainText, paddingVertical: 5 }}>Lavender</Text>
+                <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#795548") }} style={[styles.dialogColorSelect, { backgroundColor: '#795548' }]} />
+                <Text style={{ color: colors.mainText, paddingVertical: 5 }}>Brown</Text>
               </View>
 
               <View style={{ alignItems: "center", padding: 5, backgroundColor: colors.border + 50, borderRadius: 15 }}>
@@ -149,6 +149,7 @@ const Setting = () => {
               </View>
 
             </View>
+            
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}>
 
               <View style={{ alignItems: "center", padding: 5, backgroundColor: colors.border + 50, borderRadius: 15 }}>
@@ -162,8 +163,8 @@ const Setting = () => {
               </View>
 
               <View style={{ alignItems: "center", padding: 5, backgroundColor: colors.border + 50, borderRadius: 15 }}>
-                <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#795548") }} style={[styles.dialogColorSelect, { backgroundColor: '#795548' }]} />
-                <Text style={{ color: colors.mainText, paddingVertical: 5 }}>Brown</Text>
+                <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#8a4af3") }} style={[styles.dialogColorSelect, { backgroundColor: '#8a4af3' }]} />
+                <Text style={{ color: colors.mainText, paddingVertical: 5 }}>Lavender</Text>
               </View>
 
               <View style={{ alignItems: "center", padding: 5, backgroundColor: colors.border + 50, borderRadius: 15 }}>

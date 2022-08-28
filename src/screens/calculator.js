@@ -244,20 +244,25 @@ const Calculator = () => {
     // Ye live calculation ka lia useEffect lagaya hoa ha jasy hi userInput me kuch change ho ga ye calculate kr dy ga
     useEffect(() => {
         const calculate = () => {
-            if (userInput) {
-                let lastArr = userInput[userInput.length - 1]
-                if (lastArr === '/' || lastArr === '*' || lastArr === '-' || lastArr === '+' || lastArr === '.') {
-                    setUserInput(userInput);
-                } else if (lastArr === "%") {
-                    setLastNumber(userInput.toString().substring(0, userInput.length - 1) / 100)
-                }
-                else {
-                    let result = eval(userInput)
-                    if (result.toString().includes('.')) {
-                        result = (eval(userInput)).toFixed(2)
+            try {
+                if (userInput) {
+                    let lastArr = userInput[userInput.length - 1]
+                    if (lastArr === '/' || lastArr === '*' || lastArr === '-' || lastArr === '+' || lastArr === '.') {
+                        setUserInput(userInput);
+                    } else if (lastArr === "%") {
+                        setLastNumber(userInput.toString().substring(0, userInput.length - 1) / 100)
                     }
-                    setLastNumber(result)
+                    else {
+                        let result = eval(userInput)
+                        if (result.toString().includes('.')) {
+                            result = (eval(userInput)).toFixed(2)
+                        }
+                        setLastNumber(result)
+                    }
                 }
+            } catch (err) {
+                console.log(err.message);
+
             }
         }
         calculate()
@@ -510,7 +515,7 @@ const Calculator = () => {
                                         }
                                         return (
                                             <TouchableOpacity
-                                                activeOpacity={0.8}
+                                                activeOpacity={0.6}
                                                 style={style.TouchableOpacityHistory} onPress={() => dataSetTouserInput(item)} >
                                                 <Text style={[style.smallBoxIndex, { top: item.index === 0 ? -7 : -12 }]}>
                                                     {item.index}

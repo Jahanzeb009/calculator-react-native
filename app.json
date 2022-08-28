@@ -2,7 +2,7 @@
   "expo": {
     "name": "Calculator",
     "slug": "Calculator",
-    "version": "1.0.0",
+    "version": "1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -30,6 +30,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "971dc750-690f-47f1-b3f5-0d253791aa72"
+      }
     }
   }
 }
