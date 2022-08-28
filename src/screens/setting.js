@@ -149,7 +149,7 @@ const Setting = () => {
               </View>
 
             </View>
-            
+
             <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}>
 
               <View style={{ alignItems: "center", padding: 5, backgroundColor: colors.border + 50, borderRadius: 15 }}>

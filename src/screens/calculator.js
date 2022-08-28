@@ -1,6 +1,6 @@
 import toast from '../components/toast'
-import { IconButton, } from 'react-native-paper'
-import React, { useEffect, useRef, useState } from 'react'
+import { IconButton } from 'react-native-paper'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/customButton'
 import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar'
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SourceCodePro_500Medium as sourceCodePro, useFonts } from '@expo-google-fonts/source-code-pro'
 import { Animated, Easing, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
+import { Arvo_400Regular } from '@expo-google-fonts/arvo'
 
 const Calculator = () => {
 
@@ -19,7 +20,6 @@ const Calculator = () => {
     const [lastNumber, setLastNumber] = useState('0');
     const [userInput, setUserInput] = useState('');
     const [historyVisible, setHistoryVisible] = useState(false)
-
 
     // Animation start
     let spinValue = new Animated.Value(0);
@@ -44,124 +44,55 @@ const Calculator = () => {
     // Main Data 
     const mainData = [
         {
-            DisplayName: <IconButton icon={'close'} iconColor={'red'} size={30} />,
             Value: 'C',
-            backgroundColor: colors.primary + '30',
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
         {
-            DisplayName: '%',
             Value: "%",
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
         {
             DisplayName: '\xF7',
             Value: "/",
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
         {
-            DisplayName: <IconButton icon={'backspace-outline'} iconColor={colors.mainText} />,
+            DisplayName: <IconButton icon={'backspace'} size={30} iconColor={colors.mainText} />,
             Value: 'DEL',
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
-        {
-            DisplayName: '7',
-            Value: 7,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '8',
-            Value: 8,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '9',
-            Value: 9,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
+        { Value: 7 },
+        { Value: 8 },
+        { Value: 9 },
         {
             DisplayName: '\xD7',
             Value: "*",
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
-        {
-            DisplayName: '4',
-            Value: 4,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '5',
-            Value: 5,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '6',
-            Value: 6,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
+        { Value: 4 },
+        { Value: 5 },
+        { Value: 6 },
         {
             DisplayName: '\u2013',
             Value: "-",
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
+        { Value: 1 },
+        { Value: 2 },
+        { Value: 3 },
         {
-            DisplayName: '1',
-            Value: 1,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '2',
-            Value: 2,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '3',
-            Value: 3,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '+',
             Value: "+",
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
-        {
-            DisplayName: "00",
-            Value: "00",
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
-        {
-            DisplayName: '0',
-            Value: 0,
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
-        },
+        { Value: "00" },
+        { Value: 0 },
         {
             DisplayName: '\xB7',
             Value: ".",
-            backgroundColor: colors.primary + '05',
-            borderColor: colors.primary + 30,
         },
         {
-            DisplayName: '=',
             Value: "=",
-            backgroundColor: colors.primary + 30,
-            borderColor: colors.primary + 60,
+            backgroundColor: colors.primary + 40,
         },
     ]
 
@@ -170,15 +101,16 @@ const Calculator = () => {
             <View style={style.ButtonView}>
                 <TouchableOpacity activeOpacity={0.7} style={[
                     style.ButtonViewTouchable, {
+                        margin: -5,
                         borderColor: mainData[index].borderColor || colors.border + 40,
                         backgroundColor: mainData[index].backgroundColor || colors.card + 99
                     }]}
                     onPress={() => { handleInput(mainData[index].Value), Vibration.vibrate([0, 5, 5, 5]) }}>
                     <Text style={{
                         fontFamily: 'sourceCodePro',
-                        fontSize: mainData[index].DisplayName === "%" ? 28 : 40,
-                        color: mainData[index].Value == "=" ? colors.primary : colors.mainText,
-                    }} >{mainData[index].DisplayName}</Text>
+                        fontSize: mainData[index].Value === "%" ? 40 : mainData[index].Value === "C" ? 35 : mainData[index].Value === "/" || "*" || '-' || '+' || '=' ? 50 : 40,
+                        color: colors.mainText,
+                    }} >{mainData[index].DisplayName || mainData[index].Value}</Text>
                 </TouchableOpacity>
             </View >
         )
@@ -197,13 +129,17 @@ const Calculator = () => {
             //  meny set kiya hoa ha ky agr meri lastValue true ho to new input allow na kro to is ka lia mujy first statement ko some time false krna ha is lia meny && use kia 
             // jab meny && use kia to lastValue bhi true ga lakin jab wo && () ki right side ko check kry ga or me koi digit press kro ga to wo pori condition false ho jay gi 
             // to hamari 2nd statment run ho jay gi
-            if ((lastValue === "+" || lastValue === "-" || lastValue === "*" || lastValue === "/" || lastValue === "." || lastValue === "%" || length == 0)
-                && (item === "+" || item === "-" || item === "*" || item === "/" || item === "." || item === "%" || item === 0 || item === "00")) {
+            if ((lastValue === "+" || lastValue === "-" || lastValue === "*" || lastValue === "/" || lastValue === "%" || length == 0)
+                && (item === "+" || item === "-" || item === "*" || item === "/" || item === "." || item === "%" || item === "00")) {
                 setUserInput(userInput)
                 toast('Invaild Format/Input')
+
+            } else if (lastValue == "." && item == ".") {
+                setUserInput(userInput)
             } else {
                 setUserInput(userInput + item);
             }
+
 
             if (item === "=") {
                 if (userInput.length === 0) {
@@ -223,21 +159,25 @@ const Calculator = () => {
 
     // Jab equalButton press ho ga tab ye run ho ga
     const equalButton = () => {
-        let lastArr = userInput[userInput.length - 1]
-        if (lastArr === '/' || lastArr === '*' || lastArr === '-' || lastArr === '+' || lastArr === '.') {
-            setUserInput(userInput);
-        } else if (lastArr === "%") {
-            setLastNumber(userInput.toString().substring(0, userInput.length - 1) / 100)
-            setUserInput(userInput.toString().substring(0, userInput.length - 1) / 100)
-        }
-        else {
-            let result = eval(userInput)
-            if (result.toString().includes('.')) {
-                result = (eval(userInput)).toFixed(2)
+        try {
+            let lastArr = userInput[userInput.length - 1]
+            if (lastArr === '/' || lastArr === '*' || lastArr === '-' || lastArr === '+' || lastArr === '.') {
+                setUserInput(userInput);
+            } else if (lastArr === "%") {
+                setLastNumber(userInput.toString().substring(0, userInput.length - 1) / 100)
+                setUserInput(userInput.toString().substring(0, userInput.length - 1) / 100)
             }
-            setLastNumber(result);
-            setUserInput(result)
-            // return;
+            else {
+                let result = eval(userInput)
+                if (result.toString().includes('.')) {
+                    result = (eval(userInput)).toFixed(2)
+                }
+                setLastNumber(result);
+                setUserInput(result)
+                // return;
+            }
+        } catch (err) {
+            toast('something went wrong')
         }
     }
 
@@ -262,7 +202,7 @@ const Calculator = () => {
                 }
             } catch (err) {
                 console.log(err.message);
-
+                toast('something went wrong')
             }
         }
         calculate()
@@ -293,10 +233,10 @@ const Calculator = () => {
         },
         UserInputText: {
             margin: 15,
-            fontSize: 35,
+            fontSize: 120,
             textAlign: 'right',
             color: colors.primary,
-            fontFamily: 'sourceCodePro'
+            fontFamily: 'Arvo_400Regular'
         },
         ResultView: {
             flex: 0.8,
@@ -314,33 +254,28 @@ const Calculator = () => {
             paddingRight: 10,
             alignSelf: 'flex-end',
             color: colors.mainText,
-            fontFamily: 'sourceCodePro',
+            fontFamily: 'Arvo_400Regular',
         },
         ButtonMainView: {
-            flex: 1.5,
-            height: '67%',
-            justifyContent: 'space-evenly'
+            flex: 1.8
         },
         ButtonView: {
-            flex: 1,
+            aspectRatio: 1,
             margin: 5,
             borderRadius: 500,
             backgroundColor: colors.background,
         },
         ButtonViewTouchable: {
             flex: 1,
-            borderWidth: 1,
             borderRadius: 500,
             alignItems: 'center',
             justifyContent: 'center',
         },
         GradientTouchableOpacityHistory: {
-            bottom: 0,
+            flex: 1.8,
             paddingTop: 5,
             width: '100%',
-            height: '60%',
             borderRadius: 20,
-            position: 'absolute',
             justifyContent: 'center',
             backgroundColor: colors.background,
         },
@@ -401,7 +336,7 @@ const Calculator = () => {
     })
 
     let [fontsLoaded] = useFonts({
-        sourceCodePro
+        sourceCodePro, Arvo_400Regular
     });
 
     if (!fontsLoaded) {
@@ -414,13 +349,13 @@ const Calculator = () => {
         return (
             <View style={{ flex: 3 }}>
                 <ExpoStatusBar animated backgroundColor='transparent' style='auto' />
-                <View style={{ flex: 1, height: '33.33%', justifyContent: "flex-end" }}>
+                <View style={{ flex: 1.2, justifyContent: "center", }}>
 
                     {/* LinearGradient Start */}
 
                     <LinearGradient style={[style.LinearGradientView]} colors={[dark ? colors.primary + 20 : colors.primary + 30, dark ? colors.card + '00' : colors.primary + "00"]} >
                         <View style={{ paddingTop: StatusBar.currentHeight, flex: 2 }}>
-                            <View style={{ flex: 2 }}>
+                            <View style={{ flex: 2, justifyContent: 'center' }}>
                                 <Text
                                     numberOfLines={4}
                                     adjustsFontSizeToFit
@@ -454,49 +389,50 @@ const Calculator = () => {
 
                 </View>
 
-                {/* Main Calculator Pad start */}
+                {!historyVisible ?
 
-                <View style={style.ButtonMainView}>
+                    // {/* Main Calculator Pad start */}
 
-                    <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {buttons(0)}
-                        {buttons(1)}
-                        {buttons(2)}
-                        {buttons(3)}
+                    <View style={[style.ButtonMainView]}>
+
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
+                            {buttons(0)}
+                            {buttons(1)}
+                            {buttons(2)}
+                            {buttons(3)}
+                        </View>
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
+                            {buttons(4)}
+                            {buttons(5)}
+                            {buttons(6)}
+                            {buttons(7)}
+                        </View>
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
+                            {buttons(8)}
+                            {buttons(9)}
+                            {buttons(10)}
+                            {buttons(11)}
+                        </View>
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
+                            {buttons(12)}
+                            {buttons(13)}
+                            {buttons(14)}
+                            {buttons(15)}
+                        </View>
+                        <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
+                            {buttons(16)}
+                            {buttons(17)}
+                            {buttons(18)}
+                            {buttons(19)}
+                        </View>
+
                     </View>
-                    <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {buttons(4)}
-                        {buttons(5)}
-                        {buttons(6)}
-                        {buttons(7)}
-                    </View>
-                    <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {buttons(8)}
-                        {buttons(9)}
-                        {buttons(10)}
-                        {buttons(11)}
-                    </View>
-                    <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {buttons(12)}
-                        {buttons(13)}
-                        {buttons(14)}
-                        {buttons(15)}
-                    </View>
-                    <View style={{ flexDirection: 'row', flex: 1 }}>
-                        {buttons(16)}
-                        {buttons(17)}
-                        {buttons(18)}
-                        {buttons(19)}
-                    </View>
 
-                </View>
+                    // {/* Main Calculator Pad End */}
 
-                {/* Main Calculator Pad End */}
+                    // {/* History Panel Start */}
 
-                {/* History Panel Start */}
-
-                {historyVisible ?
-                    <LinearGradient style={style.GradientTouchableOpacityHistory}
+                    : <LinearGradient style={style.GradientTouchableOpacityHistory}
                         colors={[dark ? colors.primary + 20 : colors.primary + 30,
                         dark ? colors.card + 60 : colors.primary + "01"]} >
 
@@ -508,7 +444,7 @@ const Calculator = () => {
                                 </View> : <FlatList
                                     data={storage.map((value, i) => ({ index: i, data: value }))}
                                     style={{ height: '100%', }}
-                                    renderItem={({ item }) => {
+                                    renderItem={({ item, }) => {
                                         let dataSetTouserInput = async (item) => {
                                             let res = await AsyncStorage.getItem(item.data[0])
                                             setUserInput(res)
@@ -543,7 +479,7 @@ const Calculator = () => {
                                         try {
                                             let check = async () => {
                                                 let b = await AsyncStorage.getAllKeys()
-                                                return await AsyncStorage.multiRemove(b.splice(0, b.length - 1))
+                                                return await AsyncStorage.multiRemove(b.splice(0, b.length - 2))
                                             }
                                             check()
                                             setStorage([])
@@ -552,7 +488,7 @@ const Calculator = () => {
                                         }
                                     }} /> : null}
                         </View>
-                    </LinearGradient> : null}
+                    </LinearGradient>}
 
                 {/* History Panel End */}
 

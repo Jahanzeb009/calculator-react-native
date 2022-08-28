@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.react.native.jahanzeb.calculator",
+      "package": "com.jahanzeb.dev.calculator",
       "versionCode": 1
     },
     "web": {

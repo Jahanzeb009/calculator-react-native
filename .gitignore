@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 test.js
+mockup images/
 
 # macOS
 .DS_Store
