@@ -1,37 +1,12 @@
-import { View, Text, Image, TouchableOpacity, StatusBar, Animated, Easing } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StatusBar } from 'react-native'
 import React from 'react'
 import Onboarding from 'react-native-onboarding-swiper'
-import logo from '../../assets/onBoarding/logo.png'
-import Custom3 from '../../assets/onBoarding/Custom3.png'
 
-const OnBordingScreen = ({ navigation }) => {
+export default OnBordingScreen = ({ navigation }) => {
 
     let dot = ({ selected }) => {
         return <View style={{ width: 15, height: 10, backgroundColor: selected ? '#ffffff' : '#00000070', marginHorizontal: 5, borderRadius: 400 }} />
     }
-
-    // Animation Start
-    let spinValue = new Animated.Value(0);
-
-    // First set up animation 
-    Animated.loop(
-        Animated.timing(
-            spinValue,
-            {
-                toValue: 1,
-                duration: 60000,
-                easing: Easing.linear, // Easing is an additional import from react-native
-                useNativeDriver: true  // To make use of native driver for performance
-            })
-    ).start()
-
-    // Next, interpolate beginning and end values (in this case 0 and 1)
-
-    const spin = spinValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
-    })
-    // Animation End
 
     return (
         <View style={{ flex: 1 }}>
@@ -50,12 +25,12 @@ const OnBordingScreen = ({ navigation }) => {
                 pages={
                     [{
                         backgroundColor: "#004b5e",
-                        image: <Animated.Image source={logo} style={{ resizeMode: "stretch", transform: [{ rotate: spin }] }} />,
+                        image: <Image source={require('../../assets/onBoarding/logo.png')} style={{ resizeMode: "stretch" }} />,
                         title: 'React Native',
                         subtitle: 'This Calculator app is fully based on\nReact Native CLI',
                     }, {
                         backgroundColor: '#4336f4',
-                        image: <Image source={Custom3} />,
+                        image: <Image source={require('../../assets/onBoarding/Custom3.png')} />,
                         title: 'Source Code',
                         subtitle: 'Complete source code is available in my Git repo',
                     }]
@@ -64,5 +39,3 @@ const OnBordingScreen = ({ navigation }) => {
         </View>
     )
 }
-
-export default OnBordingScreen;

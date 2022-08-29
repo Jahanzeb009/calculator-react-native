@@ -2,15 +2,13 @@ import React, { useContext, useState } from 'react'
 import { Linking, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Dialog, IconButton } from 'react-native-paper'
 import { useTheme } from '@react-navigation/native'
-import { fontSize } from '../components/fontSize'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthContext } from '../../App'
 import deviceInfo from '../../package.json'
-
 import * as SplashScreen from 'expo-splash-screen';
-import { SourceCodePro_500Medium as sourceCodePro, useFonts } from '@expo-google-fonts/source-code-pro'
+import { useFonts } from '@expo-google-fonts/source-code-pro'
 
-const Setting = () => {
+export default Setting = () => {
 
   const { setColorChange } = useContext(AuthContext)
 
@@ -24,7 +22,7 @@ const Setting = () => {
       paddingHorizontal: 15,
       color: colors.mainText,
       fontFamily: 'sourceCodePro',
-      fontSize: fontSize.MainTitle,
+      fontSize: 30,
     },
     cardViewColorSelector: {
       padding: 10,
@@ -39,7 +37,7 @@ const Setting = () => {
     },
     cardViewText: {
       color: colors.mainText,
-      fontSize: fontSize.Subtitle,
+      fontSize: 16,
       fontFamily: 'sourceCodePro',
     },
     cardViewSmallColorBox: {
@@ -63,7 +61,7 @@ const Setting = () => {
   })
 
   let [fontsLoaded] = useFonts({
-    sourceCodePro
+    sourceCodePro: require("../../assets/fonts/SourceCodePro.ttf")
   });
 
   if (!fontsLoaded) {
@@ -185,5 +183,3 @@ const Setting = () => {
     )
   }
 }
-
-export default Setting

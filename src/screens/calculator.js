@@ -1,17 +1,18 @@
-import toast from '../components/toast'
 import { IconButton } from 'react-native-paper'
 import React, { useEffect, useState } from 'react'
-import CustomButton from '../components/customButton'
 import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { SourceCodePro_500Medium as sourceCodePro, useFonts } from '@expo-google-fonts/source-code-pro'
-import { Animated, Easing, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
+import { useFonts } from '@expo-google-fonts/source-code-pro'
+import { FlatList, StatusBar, StyleSheet, Text, ToastAndroid, TouchableOpacity, Vibration, View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
-import { Arvo_400Regular } from '@expo-google-fonts/arvo'
 
-const Calculator = () => {
+export default Calculator = () => {
+
+    function toast(msg) {
+        ToastAndroid.show(msg, ToastAndroid.SHORT)
+    }
 
     const { colors, dark } = useTheme()
     const { navigate } = useNavigation()
@@ -20,26 +21,6 @@ const Calculator = () => {
     const [lastNumber, setLastNumber] = useState('0');
     const [userInput, setUserInput] = useState('');
     const [historyVisible, setHistoryVisible] = useState(false)
-
-    // Animation start
-    let spinValue = new Animated.Value(0);
-
-    // First set up animation 
-    Animated.timing(
-        spinValue,
-        {
-            toValue: 1,
-            duration: 2000,
-            easing: Easing.linear, // Easing is an additional import from react-native
-            useNativeDriver: true  // To make use of native driver for performance
-        }
-    ).start()
-    // Next, interpolate beginning and end values (in this case 0 and 1)
-    let spin = spinValue.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '360deg']
-    })
-    // Animation End
 
     // Main Data 
     const mainData = [
@@ -107,7 +88,7 @@ const Calculator = () => {
                     }]}
                     onPress={() => { handleInput(mainData[index].Value), Vibration.vibrate([0, 5, 5, 5]) }}>
                     <Text style={{
-                        fontFamily: 'sourceCodePro',
+                        fontFamily: 'Arvo',
                         fontSize: mainData[index].Value === "%" ? 40 : mainData[index].Value === "C" ? 35 : mainData[index].Value === "/" || "*" || '-' || '+' || '=' ? 50 : 40,
                         color: colors.mainText,
                     }} >{mainData[index].DisplayName || mainData[index].Value}</Text>
@@ -236,7 +217,7 @@ const Calculator = () => {
             fontSize: 120,
             textAlign: 'right',
             color: colors.primary,
-            fontFamily: 'Arvo_400Regular'
+            fontFamily: 'Arvo'
         },
         ResultView: {
             flex: 0.8,
@@ -254,7 +235,7 @@ const Calculator = () => {
             paddingRight: 10,
             alignSelf: 'flex-end',
             color: colors.mainText,
-            fontFamily: 'Arvo_400Regular',
+            fontFamily: 'Arvo',
         },
         ButtonMainView: {
             flex: 1.8
@@ -285,7 +266,7 @@ const Calculator = () => {
             textAlign: 'center',
             alignSelf: 'center',
             color: colors.mainText,
-            fontFamily: 'sourceCodePro',
+            fontFamily: 'Arvo',
             backgroundColor: colors.card, shadowColor: 'black', elevation: 5
         },
         TouchableOpacityHistory: {
@@ -313,7 +294,7 @@ const Calculator = () => {
         AnswerShowText: {
             fontSize: 18,
             color: colors.mainText,
-            fontFamily: 'sourceCodePro',
+            fontFamily: 'Arvo',
         },
         HistoryFlatListAnswerView: {
             marginVertical: 10,
@@ -331,12 +312,19 @@ const Calculator = () => {
             justifyContent: 'center',
             backgroundColor: colors.card + 'e8',
             borderColor: colors.border,
-            borderWidth: 1
+            borderWidth: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            alignSelf: 'center',
+            shadowColor: '#000',
+            paddingVertical: 10,
+            paddingHorizontal: '8%',
+            borderRadius: 20,
         }
     })
 
     let [fontsLoaded] = useFonts({
-        sourceCodePro, Arvo_400Regular
+        Arvo: require('../../assets/fonts/Arvo-Regular.ttf')
     });
 
     if (!fontsLoaded) {
@@ -377,7 +365,7 @@ const Calculator = () => {
 
                             <View style={{ flexDirection: 'row', }}>
                                 <IconButton icon={"backup-restore"} style={{ left: 5, backgroundColor: "#99999920", }} iconColor={"#999999"} mode="contained" onPress={async () => { setHistoryVisible(!historyVisible), Vibration.vibrate([1, 5]) }} />
-                                <IconButton icon={"cog"} style={{ left: 5, backgroundColor: "#99999920", transform: [{ rotate: spin }] }} iconColor={"#999999"} mode="contained" onPress={() => { navigate('Setting'), Vibration.vibrate([1, 5]) }} />
+                                <IconButton icon={"cog"} style={{ left: 5, backgroundColor: "#99999920" }} iconColor={"#999999"} mode="contained" onPress={() => { navigate('Setting'), Vibration.vibrate([1, 5]) }} />
                             </View>
 
                             {/* History Setting Show/Hide Button End */}
@@ -461,7 +449,7 @@ const Calculator = () => {
                                                 </Text>
                                                 <View style={style.HistoryFlatListAnswerView} />
                                                 <Text style={style.HistoryFlatListAnswerText}>
-                                                    {item.data[0]}=  <Text style={{ fontFamily: 'sourceCodePro', fontSize: 15 }}>Answer</Text>
+                                                    {item.data[0]}=  <Text style={{ fontFamily: 'Arvo', fontSize: 15 }}>Answer</Text>
                                                 </Text>
                                             </TouchableOpacity>
                                         )
@@ -471,10 +459,8 @@ const Calculator = () => {
                                 />}
 
                             {storage.length !== 0 ?
-                                <CustomButton
-                                    bgStyle={style.RemoveHistoryButton}
-                                    textStyle={{ fontFamily: 'sourceCodePro', color: colors.mainText }}
-                                    title='Remove history'
+                                <TouchableOpacity
+                                    style={style.RemoveHistoryButton}
                                     onPress={async () => {
                                         try {
                                             let check = async () => {
@@ -486,7 +472,10 @@ const Calculator = () => {
                                         } catch (e) {
                                             console.log(e.message);
                                         }
-                                    }} /> : null}
+                                    }} >
+                                    <Text style={{ fontFamily: 'Arvo', color: colors.mainText }}>Remove history</Text>
+
+                                </TouchableOpacity> : null}
                         </View>
                     </LinearGradient>}
 
@@ -496,5 +485,3 @@ const Calculator = () => {
         )
     }
 }
-
-export default Calculator;
