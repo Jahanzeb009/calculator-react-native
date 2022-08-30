@@ -11,6 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "jsEngine": "hermes",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -21,12 +22,12 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 3,
+      "package": "com.jahanzeb.dev.calculator",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.jahanzeb.dev.calculator",
-      "versionCode": 2
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,9 +36,6 @@
       "eas": {
         "projectId": "971dc750-690f-47f1-b3f5-0d253791aa72"
       }
-    },
-    "plugins": [
-      "sentry-expo"
-    ]
+    }
   }
 }

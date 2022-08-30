@@ -1,10 +1,9 @@
 import { IconButton } from 'react-native-paper'
 import React, { useEffect, useState } from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
-import { StatusBar as ExpoStatusBar } from 'expo-status-bar'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useFonts } from '@expo-google-fonts/source-code-pro'
+import { useFonts } from 'expo-font'
 import { FlatList, StatusBar, StyleSheet, Text, ToastAndroid, TouchableOpacity, Vibration, View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -33,12 +32,12 @@ export default Calculator = () => {
             backgroundColor: colors.primary + 40,
         },
         {
-            DisplayName: '\xF7',
+            DisplayName: '÷',
             Value: "/",
             backgroundColor: colors.primary + 40,
         },
         {
-            DisplayName: <IconButton icon={'backspace'} size={30} iconColor={colors.mainText} />,
+            DisplayName: <IconButton icon={'backspace'} size={30} color={colors.mainText} />,
             Value: 'DEL',
             backgroundColor: colors.primary + 40,
         },
@@ -89,8 +88,8 @@ export default Calculator = () => {
                     onPress={() => { handleInput(mainData[index].Value), Vibration.vibrate([0, 5, 5, 5]) }}>
                     <Text style={{
                         fontFamily: 'Arvo',
-                        fontSize: mainData[index].Value === "%" ? 40 : mainData[index].Value === "C" ? 35 : mainData[index].Value === "/" || "*" || '-' || '+' || '=' ? 50 : 40,
-                        color: colors.mainText,
+                        fontSize: mainData[index].Value === "%" ? 35 : mainData[index].Value === "C" ? 35 : mainData[index].Value === "/" || "*" || '-' || '+' || '=' ? 50 : 40,
+                        color: colors.mainText, justifyContent: 'center', alignItems: 'center', alignContent: 'center'
                     }} >{mainData[index].DisplayName || mainData[index].Value}</Text>
                 </TouchableOpacity>
             </View >
@@ -155,7 +154,6 @@ export default Calculator = () => {
                 }
                 setLastNumber(result);
                 setUserInput(result)
-                // return;
             }
         } catch (err) {
             toast('something went wrong')
@@ -336,12 +334,12 @@ export default Calculator = () => {
     } else {
         return (
             <View style={{ flex: 3 }}>
-                <ExpoStatusBar animated backgroundColor='transparent' style='auto' />
+                <StatusBar animated translucent barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor="transparent" />
                 <View style={{ flex: 1.2, justifyContent: "center", }}>
 
                     {/* LinearGradient Start */}
 
-                    <LinearGradient style={[style.LinearGradientView]} colors={[dark ? colors.primary + 20 : colors.primary + 30, dark ? colors.card + '00' : colors.primary + "00"]} >
+                    <LinearGradient style={[style.LinearGradientView]} colors={[dark ? colors.primary + 40 : colors.primary + 40, dark ? colors.card + '00' : colors.primary + "00"]} >
                         <View style={{ paddingTop: StatusBar.currentHeight, flex: 2 }}>
                             <View style={{ flex: 2, justifyContent: 'center' }}>
                                 <Text
@@ -364,8 +362,8 @@ export default Calculator = () => {
                             {/* History Setting Show/Hide Button Start */}
 
                             <View style={{ flexDirection: 'row', }}>
-                                <IconButton icon={"backup-restore"} style={{ left: 5, backgroundColor: "#99999920", }} iconColor={"#999999"} mode="contained" onPress={async () => { setHistoryVisible(!historyVisible), Vibration.vibrate([1, 5]) }} />
-                                <IconButton icon={"cog"} style={{ left: 5, backgroundColor: "#99999920" }} iconColor={"#999999"} mode="contained" onPress={() => { navigate('Setting'), Vibration.vibrate([1, 5]) }} />
+                                <IconButton icon={"dots-horizontal-circle"} size={32} style={{ left: 5, backgroundColor: "#99999920", }} color={dark ? "#999999" : '#404040'} mode="contained" onPress={async () => { setHistoryVisible(!historyVisible), Vibration.vibrate([1, 5]) }} />
+                                <IconButton icon={"cog"} size={32} style={{ left: 5, backgroundColor: "#99999920" }} color={dark ? "#999999" : '#404040'} mode="contained" onPress={() => { navigate('Setting'), Vibration.vibrate([1, 5]) }} />
                             </View>
 
                             {/* History Setting Show/Hide Button End */}
@@ -420,7 +418,8 @@ export default Calculator = () => {
 
                     // {/* History Panel Start */}
 
-                    : <LinearGradient style={style.GradientTouchableOpacityHistory}
+                    : 
+                    <LinearGradient style={style.GradientTouchableOpacityHistory}
                         colors={[dark ? colors.primary + 20 : colors.primary + 30,
                         dark ? colors.card + 60 : colors.primary + "01"]} >
 
