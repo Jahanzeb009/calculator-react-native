@@ -5,6 +5,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { useColorScheme } from 'react-native';
 import React, { createContext, useEffect, useMemo, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import OnBoardingScreen from './src/screens/onBoardingScreen';
 
 export const Stack = createNativeStackNavigator()
