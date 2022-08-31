@@ -24,6 +24,7 @@
     "android": {
       "versionCode": 3,
       "package": "com.jahanzeb.dev.calculator",
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.jahanzeb.dev.calculator",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
