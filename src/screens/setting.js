@@ -146,6 +146,15 @@ export default Setting = () => {
 
             </View>
 
+            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 20 }}>
+
+              <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#919151") }} style={[styles.dialogColorSelect, { backgroundColor: '#919151' }]} />
+              <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#FF81D0") }} style={[styles.dialogColorSelect, { backgroundColor: '#FF81D0' }]} />
+              <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#FFEC5C") }} style={[styles.dialogColorSelect, { backgroundColor: '#FFEC5C' }]} />
+              <TouchableOpacity onPress={async () => { setVisible(false), setColorChange(Math.random() + 1), await AsyncStorage.setItem('userColor', "#44803F") }} style={[styles.dialogColorSelect, { backgroundColor: '#44803F' }]} />
+
+            </View>
+
             {/* userColor Selection panel End */}
 
           </Dialog.Content>

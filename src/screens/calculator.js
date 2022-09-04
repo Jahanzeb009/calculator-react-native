@@ -6,12 +6,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFonts } from 'expo-font'
 import { FlatList, StatusBar, StyleSheet, Text, ToastAndroid, TouchableOpacity, Vibration, View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen';
+import { evaluate } from 'mathjs'
 
 export default Calculator = () => {
-
-    function toast(msg) {
-        ToastAndroid.show(msg, ToastAndroid.SHORT)
-    }
 
     const { colors, dark } = useTheme()
     const { navigate } = useNavigation()
@@ -21,75 +18,55 @@ export default Calculator = () => {
     const [userInput, setUserInput] = useState('');
     const [historyVisible, setHistoryVisible] = useState(false)
 
+    function toast(msg) {
+        ToastAndroid.show(msg, ToastAndroid.SHORT)
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    }
+
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+
     // Main Data 
     const mainData = [
-        {
-            Value: 'C',
-            backgroundColor: colors.primary + 40,
-        },
-        {
-            Value: "%",
-            backgroundColor: colors.primary + 40,
-        },
-        {
-            DisplayName: '÷',
-            Value: "/",
-            backgroundColor: colors.primary + 40,
-        },
-        {
+        { Value: 'C' }, { Value: "%" }, { Value: "÷" }, {
             DisplayName: <IconButton icon={'backspace'} size={30} color={colors.mainText} />,
-            Value: 'DEL',
-            backgroundColor: colors.primary + 40,
+            Value: 'DEL'
         },
-        { Value: 7 },
-        { Value: 8 },
-        { Value: 9 },
-        {
-            DisplayName: '\xD7',
-            Value: "*",
-            backgroundColor: colors.primary + 40,
-        },
-        { Value: 4 },
-        { Value: 5 },
-        { Value: 6 },
-        {
-            DisplayName: '\u2013',
-            Value: "-",
-            backgroundColor: colors.primary + 40,
-        },
-        { Value: 1 },
-        { Value: 2 },
-        { Value: 3 },
-        {
-            Value: "+",
-            backgroundColor: colors.primary + 40,
-        },
-        { Value: "00" },
-        { Value: 0 },
-        {
-            DisplayName: '\xB7',
-            Value: ".",
-        },
-        {
-            Value: "=",
-            backgroundColor: colors.primary + 40,
-        },
+        { Value: 7 }, { Value: 8 }, { Value: 9 }, { Value: "×" }, { Value: 4 }, { Value: 5 }, { Value: 6 },
+        { Value: "−" }, { Value: 1 }, { Value: 2 }, { Value: 3 }, { Value: "+" }, { Value: "00" },
+        { Value: 0 }, { Value: "." }, { Value: "=" }
     ]
 
     const buttons = (index) => {
+
+        let fontSize = mainData[index].Value === "%" ? 35 : mainData[index].Value === "C" ? 35 : mainData[index].Value === "÷" || "×" || '−' || '+' || '=' ? 50 : 40
+
+        let bgColor = mainData[index].Value === "÷" || mainData[index].Value === "×" || mainData[index].Value === '−' ||
+            mainData[index].Value === '+' || mainData[index].Value === '=' || mainData[index].Value === 'C' ||
+            mainData[index].Value === "DEL" || mainData[index].Value === "%" ? colors.primary + 40 : colors.card + 99
+
         return (
             <View style={style.ButtonView}>
                 <TouchableOpacity activeOpacity={0.7} style={[
                     style.ButtonViewTouchable, {
                         margin: -5,
                         borderColor: mainData[index].borderColor || colors.border + 40,
-                        backgroundColor: mainData[index].backgroundColor || colors.card + 99
+                        backgroundColor: bgColor
                     }]}
-                    onPress={() => { handleInput(mainData[index].Value), Vibration.vibrate([0, 5, 5, 5]) }}>
+                    onPress={() => { handleInput(mainData[index].Value), Vibration.vibrate([0, 1, 3, 4]) }}
+                >
                     <Text style={{
                         fontFamily: 'Arvo',
-                        fontSize: mainData[index].Value === "%" ? 35 : mainData[index].Value === "C" ? 35 : mainData[index].Value === "/" || "*" || '-' || '+' || '=' ? 50 : 40,
-                        color: colors.mainText, justifyContent: 'center', alignItems: 'center', alignContent: 'center'
+                        fontSize: fontSize,
+                        color: colors.mainText,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        alignContent: 'center',
+                        marginBottom: mainData[index].Value == '÷' ? 5 : null
                     }} >{mainData[index].DisplayName || mainData[index].Value}</Text>
                 </TouchableOpacity>
             </View >
@@ -101,7 +78,6 @@ export default Calculator = () => {
     let length = userInput.length
 
     const handleInput = (item) => {
-
         try {
             // Tip
             // yaha py && is lia lagaya ha 
@@ -109,27 +85,36 @@ export default Calculator = () => {
             //  meny set kiya hoa ha ky agr meri lastValue true ho to new input allow na kro to is ka lia mujy first statement ko some time false krna ha is lia meny && use kia 
             // jab meny && use kia to lastValue bhi true ga lakin jab wo && () ki right side ko check kry ga or me koi digit press kro ga to wo pori condition false ho jay gi 
             // to hamari 2nd statment run ho jay gi
-            if ((lastValue === "+" || lastValue === "-" || lastValue === "*" || lastValue === "/" || lastValue === "%" || length == 0)
-                && (item === "+" || item === "-" || item === "*" || item === "/" || item === "." || item === "%" || item === "00")) {
+            if ((lastValue === "+" || lastValue === "−" || lastValue === "×" || lastValue === "÷" || length == 0) && (item === "+" || item === "−" || item === "×" || item === "÷" || item === "." || item === "00")) {
                 setUserInput(userInput)
-                toast('Invaild Format/Input')
-
             } else if (lastValue == "." && item == ".") {
                 setUserInput(userInput)
             } else {
                 setUserInput(userInput + item);
             }
 
-
-            if (item === "=") {
-                if (userInput.length === 0) {
-                    setUserInput(userInput)
+            if (lastValue === "+") {
+                if (item === "÷" || item === "×" || item === "−") {
+                    setUserInput(userInput.substring(0, userInput.length - 1) + item)
+                }
+            } else if (lastValue === "−") {
+                if (item === "÷" || item === "×" || item === "+") {
+                    setUserInput(userInput.substring(0, userInput.length - 1) + item)
+                }
+            } else if (lastValue === "×") {
+                if (item === "÷" || item === "+" || item === "−") {
+                    setUserInput(userInput.substring(0, userInput.length - 1) + item)
+                }
+            } else if (lastValue === "÷") {
+                if (item === "×" || item === "+" || item === "−") {
+                    setUserInput(userInput.substring(0, userInput.length - 1) + item)
                 }
             }
 
-            if (item === 'DEL') return setUserInput(userInput.toString().substring(0, (userInput.length - 1)))
-            if (item === 'C') return setLastNumber('0'), setUserInput('')
             if (item === '=') return equalButton(), saveHistory()
+            if (item === 'C') return setLastNumber('0'), setUserInput('')
+            if (item === "=") { if (userInput.length === 0) { setUserInput(userInput) } }
+            if (item === 'DEL') return setUserInput(userInput.toString().substring(0, (userInput.length - 1)))
 
         } catch (error) {
             toast('Invaild Format/Input')
@@ -141,47 +126,45 @@ export default Calculator = () => {
     const equalButton = () => {
         try {
             let lastArr = userInput[userInput.length - 1]
-            if (lastArr === '/' || lastArr === '*' || lastArr === '-' || lastArr === '+' || lastArr === '.') {
+            if (lastArr === '÷' || lastArr === '×' || lastArr === '−' || lastArr === '+' || lastArr === '.') {
                 setUserInput(userInput);
-            } else if (lastArr === "%") {
-                setLastNumber(userInput.toString().substring(0, userInput.length - 1) / 100)
-                setUserInput(userInput.toString().substring(0, userInput.length - 1) / 100)
             }
             else {
-                let result = eval(userInput)
+                let rep = replaceAll(userInput, "×", "*")
+                rep = replaceAll(rep, "÷", '/')
+                rep = replaceAll(rep, "−", '-')
+                let result = JSON.stringify(evaluate(rep))
                 if (result.toString().includes('.')) {
-                    result = (eval(userInput)).toFixed(2)
+                    result = (evaluate(rep)).toFixed(3)
                 }
                 setLastNumber(result);
                 setUserInput(result)
             }
         } catch (err) {
-            toast('something went wrong')
+            console.log("equal buttom press : ", err.message);
         }
     }
 
     // Ye live calculation ka lia useEffect lagaya hoa ha jasy hi userInput me kuch change ho ga ye calculate kr dy ga
     useEffect(() => {
         const calculate = () => {
+            let lastArr = userInput[userInput.length - 1]
             try {
-                if (userInput) {
-                    let lastArr = userInput[userInput.length - 1]
-                    if (lastArr === '/' || lastArr === '*' || lastArr === '-' || lastArr === '+' || lastArr === '.') {
-                        setUserInput(userInput);
-                    } else if (lastArr === "%") {
-                        setLastNumber(userInput.toString().substring(0, userInput.length - 1) / 100)
+                if (lastArr === '÷' || lastArr === '×' || lastArr === '−' || lastArr === '+' || lastArr === '.') {
+                    setUserInput(userInput);
+                } else {
+                    let rep = replaceAll(userInput, "×", "*")
+                    rep = replaceAll(rep, "÷", '/')
+                    rep = replaceAll(rep, "−", '-')
+                    let result = (evaluate(rep))
+                    if (result.toString().includes('.')) {
+                        result = (evaluate(rep)).toFixed(3)
                     }
-                    else {
-                        let result = eval(userInput)
-                        if (result.toString().includes('.')) {
-                            result = (eval(userInput)).toFixed(2)
-                        }
-                        setLastNumber(result)
-                    }
+                    setLastNumber(result)
                 }
             } catch (err) {
-                console.log(err.message);
-                toast('something went wrong')
+                console.log(err);
+                console.log("Live calculation : ", err.message);
             }
         }
         calculate()
@@ -189,9 +172,9 @@ export default Calculator = () => {
 
     // Ye AsyncStorage me History/data ko save krta ha jab equalButton press hota 
     let saveHistory = async () => {
-        let result = eval(userInput)
+        let result = evaluate(userInput)
         if (result.toString().includes('.')) {
-            result = (eval(userInput)).toFixed(2)
+            result = (evaluate(userInput)).toFixed(2)
         }
         await AsyncStorage.setItem(`${result}`, `${userInput}`)
     }
@@ -382,34 +365,19 @@ export default Calculator = () => {
                     <View style={[style.ButtonMainView]}>
 
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
-                            {buttons(0)}
-                            {buttons(1)}
-                            {buttons(2)}
-                            {buttons(3)}
+                            {buttons(0)}{buttons(1)}{buttons(2)}{buttons(3)}
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
-                            {buttons(4)}
-                            {buttons(5)}
-                            {buttons(6)}
-                            {buttons(7)}
+                            {buttons(4)}{buttons(5)}{buttons(6)}{buttons(7)}
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
-                            {buttons(8)}
-                            {buttons(9)}
-                            {buttons(10)}
-                            {buttons(11)}
+                            {buttons(8)}{buttons(9)}{buttons(10)}{buttons(11)}
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
-                            {buttons(12)}
-                            {buttons(13)}
-                            {buttons(14)}
-                            {buttons(15)}
+                            {buttons(12)}{buttons(13)}{buttons(14)}{buttons(15)}
                         </View>
                         <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-evenly', alignContent: 'center' }}>
-                            {buttons(16)}
-                            {buttons(17)}
-                            {buttons(18)}
-                            {buttons(19)}
+                            {buttons(16)}{buttons(17)}{buttons(18)}{buttons(19)}
                         </View>
 
                     </View>
@@ -418,7 +386,7 @@ export default Calculator = () => {
 
                     // {/* History Panel Start */}
 
-                    : 
+                    :
                     <LinearGradient style={style.GradientTouchableOpacityHistory}
                         colors={[dark ? colors.primary + 20 : colors.primary + 30,
                         dark ? colors.card + 60 : colors.primary + "01"]} >
