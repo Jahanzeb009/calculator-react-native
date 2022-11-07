@@ -29,7 +29,7 @@ export default OnBordingScreen = ({ navigation }) => {
                         title: 'React Native',
                         subtitle: 'This Calculator app is fully based on\nReact Native CLI',
                     }, {
-                        backgroundColor: '#4336f4',
+                        backgroundColor: '#7f79d1',
                         image: <Image source={require('../../assets/onBoarding/Custom3.png')} />,
                         title: 'Source Code',
                         subtitle: 'Complete source code is available in my Git repo',

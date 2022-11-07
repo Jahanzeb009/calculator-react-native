@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react'
-import { Linking, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Linking, StatusBar, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
 import { Dialog, IconButton } from 'react-native-paper'
 import { useNavigation, useTheme } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AuthContext } from '../../App'
-import deviceInfo from '../../package.json'
-import * as SplashScreen from 'expo-splash-screen';
-import { useFonts } from 'expo-font'
+// import * as SplashScreen from 'expo-splash-screen';
+// import { useFonts } from 'expo-font'
 
 export default Setting = () => {
 
@@ -61,24 +60,24 @@ export default Setting = () => {
     }
   })
 
-  let [fontsLoaded] = useFonts({
-    sourceCodePro: require("../../assets/fonts/SourceCodePro.ttf")
-  });
+  // let [fontsLoaded] = useFonts({
+  //   sourceCodePro: require("../../assets/fonts/SourceCodePro.ttf")
+  // });
 
-  if (!fontsLoaded) {
-    async () => {
-      return (
-        await SplashScreen.hideAsync()
-      )
-    }
-  } else {
+  // if (!fontsLoaded) {
+  //   async () => {
+  //     return (
+  //       await SplashScreen.hideAsync()
+  //     )
+  //   }
+  // } else {
     return (
       <View style={{ flex: 4 }}>
         <StatusBar animated translucent barStyle={dark ? 'light-content' : 'dark-content'} backgroundColor="transparent" />
 
         <View style={{ flex: 3, marginTop: StatusBar.currentHeight, marginHorizontal: 10 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-            <IconButton icon={'arrow-left'} color={colors.mainText} size={25} style={{ backgroundColor: colors.card, borderRadius: 15 }} onPress={() => { navigate('Homee') }} />
+            <IconButton icon={'arrow-left'} color={colors.mainText} size={32} style={{ backgroundColor: colors.card, borderRadius: 15 }} onPress={() => { navigate('Homee') ,Vibration.vibrate(50)}} />
             <Text style={styles.title}>Settings</Text>
           </View>
           {/* cardView Start */}
@@ -101,7 +100,7 @@ export default Setting = () => {
 
           <View>
             <Text style={styles.deviceInfoText}>
-              App: {deviceInfo.name}{"\n"}Version: {deviceInfo.version}
+              App: Calculator{"\n"}Version: 1.2-New
             </Text>
           </View>
 
@@ -165,4 +164,4 @@ export default Setting = () => {
       </View>
     )
   }
-}
+// }
