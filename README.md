@@ -6,8 +6,8 @@ You can checkout this app in [Playstore](https://play.google.com/store/apps/deta
 
 **How to**
 
-- Implement Liner Gradient
-- Calculate Math equations
+- Implement Linear Gradient
+- Calculate Math phrases
 - Implement onboarding screen
 - Store user recent history in AsyncStorage
 - Reuse code
