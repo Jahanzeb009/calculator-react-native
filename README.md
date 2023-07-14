@@ -4,8 +4,6 @@ You can checkout this app in [Playstore](https://play.google.com/store/apps/deta
 
 # What will you learn from this project
 
-**How to**
-
 - Implement Linear Gradient
 - Calculate Math phrases
 - Implement onboarding screen
