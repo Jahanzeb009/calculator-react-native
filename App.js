@@ -1,140 +1,15 @@
-// /**
-//  * Sample React Native App
-//  * https://github.com/facebook/react-native
-//  *
-//  * @format
-//  * @flow strict-local
-//  */
-
-// import React from 'react';
-// import type {Node} from 'react';
-// import {
-//   SafeAreaView,
-//   ScrollView,
-//   StatusBar,
-//   StyleSheet,
-//   Text,
-//   useColorScheme,
-//   View,
-// } from 'react-native';
-
-// import {
-//   Colors,
-//   DebugInstructions,
-//   Header,
-//   LearnMoreLinks,
-//   ReloadInstructions,
-// } from 'react-native/Libraries/NewAppScreen';
-
-// /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
-//  * LTI update could not be added via codemod */
-// const Section = ({children, title}): Node => {
-//   const isDarkMode = useColorScheme() === 'dark';
-//   return (
-//     <View style={styles.sectionContainer}>
-//       <Text
-//         style={[
-//           styles.sectionTitle,
-//           {
-//             color: isDarkMode ? Colors.white : Colors.black,
-//           },
-//         ]}>
-//         {title}
-//       </Text>
-//       <Text
-//         style={[
-//           styles.sectionDescription,
-//           {
-//             color: isDarkMode ? Colors.light : Colors.dark,
-//           },
-//         ]}>
-//         {children}
-//       </Text>
-//     </View>
-//   );
-// };
-
-// const App: () => Node = () => {
-//   const isDarkMode = useColorScheme() === 'dark';
-
-//   const backgroundStyle = {
-//     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-//   };
-
-//   return (
-//     <SafeAreaView style={backgroundStyle}>
-//       <StatusBar
-//         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-//         backgroundColor={backgroundStyle.backgroundColor}
-//       />
-//       <ScrollView
-//         contentInsetAdjustmentBehavior="automatic"
-//         style={backgroundStyle}>
-//         <Header />
-//         <View
-//           style={{
-//             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-//           }}>
-//           <Section title="Step One">
-//             Edit <Text style={styles.highlight}>App.js</Text> to change this
-//             screen and then come back to see your edits.
-//           </Section>
-//           <Section title="See Your Changes">
-//             <ReloadInstructions />
-//           </Section>
-//           <Section title="Debug">
-//             <DebugInstructions />
-//           </Section>
-//           <Section title="Learn More">
-//             Read the docs to discover what to do next:
-//           </Section>
-//           <LearnMoreLinks />
-//         </View>
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   sectionContainer: {
-//     marginTop: 32,
-//     paddingHorizontal: 24,
-//   },
-//   sectionTitle: {
-//     fontSize: 24,
-//     fontWeight: '600',
-//   },
-//   sectionDescription: {
-//     marginTop: 8,
-//     fontSize: 18,
-//     fontWeight: '400',
-//   },
-//   highlight: {
-//     fontWeight: '700',
-//   },
-// });
-
-// export default App;
-
-
-
-
-
-
-
-
-
-
-
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import calculator from './src/screens/calculator';
-import setting, { } from './src/screens/setting';
+import { StatusBar } from 'expo-status-bar';
+import { ActivityIndicator, StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
-import { useColorScheme } from 'react-native';
-import React, { createContext, useEffect, useMemo, useState } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createContext, useEffect, useState } from 'react';
+import Calculator from './src/calculator';
+import setting from './src/setting';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import OnBoardingScreen from './src/screens/onBoardingScreen';
+import * as Font from 'expo-font';
+import InAppReview from 'react-native-in-app-review';
+import { Button } from 'react-native-paper';
 
 export const Stack = createNativeStackNavigator()
 
@@ -142,40 +17,38 @@ export const AuthContext = createContext()
 
 export default function App() {
 
-  const [firstTime, setFirstTime] = useState(null)
+  // const [fontsLoaded] = Font.useFonts({
+  //   'arvo': require('./assets/fonts/arvo.ttf'),
+  //   'sourceCodePro': require('./assets/fonts/sourceCodePro.ttf'),
+  // });
+
   const [userColor, setUserColor] = useState('#03a073')
 
   // use for authcontext
 
   const [ColorChange, setColorChange] = useState(0)
-
-  const authContext = useMemo(
-    () => ({
-      setColorChange,
-    }), []
-  )
+  const [cornerRadius, SetCornerRadius] = useState(10)
 
   useEffect(() => {
-    let fetchColor = async () => {
+    (async () => {
       await AsyncStorage.getItem('userColor').then((val) => {
         if (val) {
           setUserColor(val)
         }
       })
-    }
-    fetchColor()
+    })()
   }, [ColorChange])
 
   useEffect(() => {
-    AsyncStorage.getItem('already').then((value) => {
-      if (value === null) {
-        AsyncStorage.setItem("already", 'true ')
-        setFirstTime(true)
-      } else {
-        setFirstTime(false)
-      }
-    })
-  }, [])
+    (async () => {
+      await AsyncStorage.getItem('cornerRadius').then((val) => {
+        if (val) {
+          SetCornerRadius(parseInt(val))
+        }
+      })
+    })()
+
+  }, [cornerRadius])
 
   const myLight = {
     ...DefaultTheme,
@@ -185,7 +58,8 @@ export default function App() {
       primary: userColor,
       mainText: '#1f1f1f',
       background: "#ffffff",
-    }, roundness: 26,
+      cornerRadius: parseInt(cornerRadius)
+    }
   }
 
   const myDark = {
@@ -196,15 +70,25 @@ export default function App() {
       primary: userColor,
       mainText: '#c7c7c7',
       background: '#000000',
+      cornerRadius: parseInt(cornerRadius)
     }
   }
 
+  // if (!fontsLoaded) {
+  //   return <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  //     <ActivityIndicator />
+  //   </View>
+  // }
+
   return (
-    <AuthContext.Provider value={authContext}>
+    <AuthContext.Provider value={{
+      setColorChange,
+      SetCornerRadius
+    }}>
       <NavigationContainer theme={useColorScheme() === 'dark' ? myDark : myLight}>
-        <Stack.Navigator screenOptions={{ headerShown: false, animation:'fade_from_bottom' }}>
-          {firstTime == true ? <Stack.Screen name='Onboarding' component={OnBoardingScreen} /> : <Stack.Screen name='Home' component={calculator} />}
-          <Stack.Screen name='Homee' component={calculator} />
+        {/* <Stack.Screen name='Drawer' component={Drawer} /> */}
+        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade_from_bottom' }}>
+          <Stack.Screen name='Home' component={Calculator} />
           <Stack.Screen name='Setting' component={setting} />
         </Stack.Navigator>
       </NavigationContainer>
